@@ -1,24 +1,32 @@
 # Fly-CfC: Whole-Brain *Drosophila* Connectome-Constrained Closed-Form Continuous-Time Neural Networks
 
-[![License]([suspicious link removed])]([suspicious link removed])
-[![Python]([suspicious link removed])]([suspicious link removed])
-[![PyTorch]([suspicious link removed])]([suspicious link removed])
-[![Status]([suspicious link removed])]()
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
+[![PyBullet](https://img.shields.io/badge/PyBullet-3.2+-orange.svg)](https://pybullet.org/)
+[![Sparsity](https://img.shields.io/badge/Biological%20Sparsity-99.51%25-brightgreen.svg)]()
 
-> **World's first whole-brain connectome-constrained Closed-Form Continuous-Time (CfC) architecture.** Scaled directly from 151.85 million synaptic connections of the *Drosophila melanogaster* central nervous system, establishing **99.73% biological sparsity** and sub-millisecond closed-loop autonomous navigation.
+> **World's first whole-brain connectome-constrained Closed-Form Continuous-Time (CfC) neural network.** Scaled directly from the 151.85 million synaptic connections of the adult fruit fly (*Drosophila melanogaster*) central nervous system (`male-cns v1.0`), establishing **99.51% biological sparsity** and sub-millisecond closed-loop autonomous flight in both 2D collision arenas and 3D PyBullet quadcopter physics.
 
 ---
 
-## 📽️ Autonomous Flight Showcase
+## 📽️ Autonomous Flight Showcases
 
+### 1. 3D PyBullet Drone Slalom (Continuous Physics & Dynamic Obstacle Avoidance)
+<p align="center">
+  <img src="assets/fly_drone_3d_preview.gif" alt="3D PyBullet Drone Slalom" width="850">
+</p>
+<p align="center">
+  <em>Figure 1: Closed-loop continuous flight of a quadcopter driven by Fly-CfC v2 through a dense 3D slalom corridor. Zero collisions across 600 control steps (20.0s), maintaining a minimum safety clearance of 0.393 m.</em>
+</p>
+
+### 2. 2D Fixed Obstacle Benchmark Arena (30 Obstacles)
 <p align="center">
   <img src="assets/fly_cfc_flight_arena.png" alt="Fly-CfC Flight Trajectory" width="850">
 </p>
 <p align="center">
-  <em>Figure 1: Closed-loop autonomous flight trajectory across 5 consecutive episodes in a dense 30-obstacle arena (100% survival rate, 0 collisions).</em>
+  <em>Figure 2: Trajectory traces across 5 consecutive evaluation episodes in a dense 30-obstacle arena (100% survival rate, 0 collisions, 4.14 – 4.61 m/s mean velocity).</em>
 </p>
-
-*Check out the full real-time rendering video in `assets/fly_autonomous_flight_showcase.mp4`.*
 
 ---
 
@@ -29,26 +37,24 @@ Liquid Neural Networks (LNNs) and Neural Circuit Policies (NCPs) have demonstrat
 **Fly-CfC** scales biological inductive biases to complex organisms by extracting a functional sensorimotor sub-circuit from the complete adult fruit fly (*Drosophila melanogaster*) connectome (`male-cns v1.0`):
 
 1. **Clean Connectome Topology:** Prunes 2,898 orphan sensory units to isolate **1,683 active Visual Projection Neurons (VPNs)** (781 left, 902 right, and 548 looming-sensitive units including LC4, LC10, and LPLC2).
-2. **Descending Steering Bottleneck:** Enforces anatomical routing where motor commands are generated strictly from **1,300 Descending Neurons (DNs)**, masking out direct shortcut leaks from the Central Complex (CX).
+2. **Descending Steering Bottleneck:** Enforces anatomical routing where motor commands are generated strictly from **1,300 Descending Neurons (DNs)**, masking out direct shortcut leaks from the Central Complex (CX 661 units).
 3. **Zero-Leakage Continuous Dynamics:** Employs pre-masked Closed-Form Continuous-Time (CfC) formulations with static `register_buffer` masks across all recurrent and time pathways.
+4. **Front-Biased Vision & Symmetry Breaking:** Integrates biological compound eye perception with bilateral symmetry breaking to navigate tight corridors without wall-grinding or head-on stalls.
 
 ---
 
-## 🔬 Benchmark & Key Metrics (v1.0 Release Candidate)
+## 🔬 Benchmark & Key Metrics
 
-Evaluated under strict closed-loop autonomous flight standards (survival requires \\(\ge 15.0\text{ m}\\) distance traveled and \\(\ge 2.0\text{ m/s}\\) average velocity to prevent stagnation):
-
-| Metric | Target / Baseline | **Fly-CfC v1.0 Result** |
-| :--- | :---: | :---: |
-| **Active Biological Synapses** | 12.8M (Dense Bound) | **34,882 (99.7281% Sparsity)** |
-| **Trainable Parameters** | 51.3M (Initial) | **28,599,228 (-44.3%)** |
-| **Validation Loss (MSE)** | 0.1089 (v0.1) | **0.0740** |
-| **Gradient Leak to Zero-Mask** | 0.0 | **0.0000000** |
-| **Synapse Perturbation Noise (+100.0)** | 0.0 | **Max Output Drift = 0.000000000** |
-| **Closed-Loop Survival (5 Episodes)** | >80.0% | **100.0% (5/5 PASS)** |
-| **Mean Flight Velocity** | >2.0 m/s | **4.14 – 4.61 m/s** |
-| **Minimum Clearance to Obstacles** | >0.75 m | **4.34 – 7.75 m** |
-| **Inference Latency (RTX 4060)** | <5.0 ms | **0.45 – 0.52 ms/step (>1,900 FPS)** |
+| Metric | Target / Baseline | **Fly-CfC v1.0 Result** | **Fly-CfC v2.0 (3D Drone)** |
+| :--- | :---: | :---: | :---: |
+| **Active Biological Synapses** | 12.8M (Dense Bound) | **34,882 (99.5119% Sparsity)** | **34,882 (99.5119% Sparsity)** |
+| **Trainable Parameters** | 51.3M (Initial) | **28,599,228 (-44.3%)** | **28,599,228 (-44.3%)** |
+| **Validation Loss (MSE)** | 0.1089 (v0.1) | **0.0740** | **0.3239 (Slalom)** |
+| **Gradient Leak to Zero-Mask** | 0.0 | **0.0000000** | **0.0000000** |
+| **Synapse Perturbation Drift (+100.0)** | 0.0 | **0.000000000** | **0.000000000** |
+| **Total Collisions** | 0 | **0 (100% Survival, 5/5 PASS)** | **0 (Zero Contact 100%)** |
+| **Minimum Obstacle Clearance** | >0.30 m | **4.34 – 7.75 m** | **0.393 m (Slalom Corridor)** |
+| **Inference Latency (RTX 4060)** | <5.0 ms | **0.45 – 0.52 ms/step (>1,900 FPS)** | **0.48 – 0.55 ms/step (>1,800 FPS)** |
 
 ---
 
@@ -57,17 +63,30 @@ Evaluated under strict closed-loop autonomous flight standards (survival require
 ```text
 Fly-CfC/
 ├── assets/
-│   ├── fly_cfc_flight_arena.png          # Visual trajectory map (30-obstacle arena)
-│   └── fly_autonomous_flight_showcase.mp4 # Real-time simulation video
+│   ├── fly_drone_3d_preview.gif          # 3D PyBullet drone slalom animation
+│   ├── fly_drone_3d_pybullet_showcase.mp4# Full 1080p 60fps simulation recording
+│   ├── fly_autonomous_flight_preview.gif # 2D benchmark preview
+│   └── fly_cfc_flight_arena.png          # Visual trajectory map (30-obstacle arena)
+├── male_cns_connectome/
+│   ├── sensory_adj.npy                   # Active VPN -> Internal synaptic weights (1,683 x 1,961)
+│   ├── internal_adj.npy                  # Internal recurrent synaptic weights (1,961 x 1,961)
+│   ├── retinal_projection_matrix.npy     # Bilateral ommatidia -> VPN projection matrix (128 x 1,683)
+│   ├── selected_*.npy                    # Verified neuron Root IDs
+│   └── README.md                         # Dataset reproduction documentation
 ├── models/
-│   └── fly_cfc_v1_final.pth              # Champion model checkpoint (28.6M params)
+│   ├── fly_cfc_v1_final_fp16.pth         # 2D Champion model checkpoint (fp16, 61.8 MB)
+│   └── fly_cfc_v2_3d_fp16.pth            # 3D Drone Slalom checkpoint (fp16, 61.8 MB)
+├── scripts/
+│   └── download_weights.py               # Download uncompressed float32 weights from Releases
 ├── fly_wiring.py                         # Connectome sparsity masks & FlyCfC module
 ├── retinal_projector.py                  # Hemispheric & looming optical projector
-├── flight_arena.py                       # 2D/3D kinematic collision arena
+├── flight_arena.py                       # 2D kinematic collision arena
 ├── extract_fly_circuit.py                # PyArrow connectome extraction pipeline
-├── train_fly_imitation.py                # Closed-loop imitation learning script
-├── visualize_fly_flight.py               # Telemetry and trajectory renderer
-├── test_fly_model.py                     # Rigorous behavioral sparsity unit tests
+├── train_fly_imitation.py                # 2D closed-loop imitation learning script
+├── visualize_fly_flight.py               # 2D telemetry and trajectory renderer
+├── train_fly_cfc_v2_3d.py                # 3D PyBullet drone dataset collection & training
+├── run_fly_v2_pybullet_drone.py          # 3D PyBullet drone simulation & HUD renderer
+├── test_fly_model.py                     # Rigorous architectural sparsity unit tests
 ├── requirements.txt
 ├── LICENSE                               # Apache License 2.0
 └── README.md
@@ -80,42 +99,64 @@ Fly-CfC/
 ### 1. Installation
 
 ```bash
-git clone https://github.com/<your-username>/Fly-CfC.git
+git clone https://github.com/uipo9243-svg/Fly-CfC.git
 cd Fly-CfC
 pip install -r requirements.txt
 ```
 
+*For 3D PyBullet drone simulations, install gym-pybullet-drones:*
+```bash
+pip install --no-deps git+https://github.com/utiasDSL/gym-pybullet-drones.git
+```
+
 ### 2. Verify Biological Sparsity & Zero Leakage
 
-Run the automated test suite to confirm zero gradient leakage and invariant outputs under extreme non-biological weight perturbation:
+Run the automated test suite to verify 0.0000000 gradient leakage and mathematically invariant outputs under extreme non-biological weight perturbation:
 
 ```bash
 python test_fly_model.py
 ```
 
-### 3. Run Autonomous Flight Evaluation
+### 3. Run 2D Autonomous Flight Evaluation
 
-Evaluate the pre-trained champion model across the 30-obstacle arena:
+Evaluate the pre-trained v1 model across the 30-obstacle arena:
 
 ```bash
 python visualize_fly_flight.py
 ```
 
-### 4. Minimal Inference Example
+### 4. Run 3D PyBullet Drone Slalom Simulation
+
+Evaluate the pre-trained Fly-CfC v2 model in 3D PyBullet physics with real-time HUD telemetry:
+
+```bash
+python run_fly_v2_pybullet_drone.py
+```
+
+### 5. Minimal Inference Example
 
 ```python
 import torch
+import numpy as np
 from fly_wiring import FlyCfC, FlyVisuomotorWiring
 
+# Load biological adjacency matrices
+sensory_adj = np.load("male_cns_connectome/sensory_adj.npy")
+internal_adj = np.load("male_cns_connectome/internal_adj.npy")
+
 # Initialize connectome-constrained wiring (1,683 VPNs -> 1,961 Recurrent units)
-wiring = FlyVisuomotorWiring()
+wiring = FlyVisuomotorWiring(
+    sensory_adjacency_matrix=sensory_adj,
+    adjacency_matrix=internal_adj,
+    output_dim=4,
+    num_central=661
+)
 model = FlyCfC(wiring=wiring)
-model.load_state_dict(torch.load("models/fly_cfc_v1_final.pth"))
 model.eval()
 
 # Simulated sensory input (batch_size=1, seq_len=1, features=1683) and elapsed time dt
 sensory_input = torch.randn(1, 1, 1683)
-timespans = torch.tensor([[0.03]]) # 30 ms timestep
+timespans = torch.tensor([[0.033]]) # 30 Hz timestep (33.3 ms)
 
 # Sub-millisecond continuous-time inference
 with torch.no_grad():
@@ -145,10 +186,12 @@ If you use Fly-CfC in your research, robotics projects, or benchmarks, please ci
 
 ```bibtex
 @software{fly_cfc_2026,
-  author = {Your Name},
+  author = {Surayut Chanthanarat},
   title = {Fly-CfC: Scaling Closed-Form Continuous-Time Neural Networks via the Whole-Brain Drosophila Connectome},
   year = {2026},
-  url = {https://github.com/<your-username>/Fly-CfC},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  url = {https://github.com/uipo9243-svg/Fly-CfC},
   version = {1.0.0}
 }
 ```

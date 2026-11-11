@@ -218,3 +218,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Drosophila Connectome Data
+*.feather
+*.feather.gz
+male_cns_connectome/*.feather
+male_cns_connectome/*.full4581.*
+
+# Model Checkpoints >100MB (Hosted via GitHub Releases)
+models/fly_cfc_v1_final.pth
+models/fly_cfc_v2_3d.pth
+models/fly_cfc_champion.pth
+*.pre_fix_backup.*
