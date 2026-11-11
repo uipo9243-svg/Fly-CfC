@@ -59,7 +59,7 @@
 
 Autonomous aerial navigation in unstructured, cluttered environments remains one of the foundational challenges in robotics and artificial intelligence. Micro Air Vehicles (MAVs) and autonomous quadcopters operating in subterranean tunnels, collapsed buildings, and dense forests require agile collision avoidance, rapid sensorimotor reflexes, and high energetic efficiency under severe onboard computational constraints. Conventional deep reinforcement learning (RL) and transformer-based policies operating in discrete time steps typically require millions of parameters, incur tens of milliseconds of latency, and exhibit fragile degradation when confronted with out-of-distribution visual disturbances or abrupt aerodynamic shifts.
 
-Nature has long resolved this challenge through continuous-time neural computing. The common fruit fly (_Drosophila melanogaster_) executes aerial saccades in under 50 milliseconds, navigates dense foliage, and avoids moving predators using a brain smaller than a poppy seed operating on less than one microwatt of metabolic power. Recent breakthroughs in electron microscopy connectomics have culminated in the complete synaptic mapping of the adult _Drosophila_ central nervous system, identifying over 166,000 neurons and 151.85 million synaptic connections (Takemura et al., 2023; Dorkenwald et al., 2024; Schlegel et al., 2024).
+Nature has long resolved this challenge through continuous-time neural computing. The common fruit fly (_Drosophila melanogaster_) executes aerial saccades in under 50 milliseconds, navigates dense foliage, and avoids moving predators using a brain smaller than a poppy seed operating on less than one microwatt of metabolic power. Recent breakthroughs in electron microscopy connectomics have culminated in the complete synaptic mapping of the adult _Drosophila_ central nervous system, identifying over 166,000 neurons and 151.85 million synaptic connections (Berg et al., 2026; Takemura et al., 2023; Dorkenwald et al., 2024; Schlegel et al., 2024).
 
 Concurrently, modern continuous-time deep learning has evolved with Neural Ordinary Differential Equations (Neural ODEs) (Chen et al., 2018), Liquid Time-Constant (LTC) networks (Hasani et al., 2021), and Closed-Form Continuous-Time (CfC) models (Hasani et al., 2022). CfCs bypass numerical ODE solvers by deriving an explicit closed-form approximation of the continuous neural state trajectory:
 $ x(t) approx sigma(-f(x, I)t) dot g(x, I) + [1 - sigma(-f(x, I)t)] dot h(x, I) $
@@ -93,7 +93,7 @@ To address these limitations, Hasani et al. (2021) introduced Liquid Time-Consta
 The concept of constraining neural network topology using biological wiring diagrams was pioneered by Lechner et al. (2020) with Neural Circuit Policies (NCPs). By embedding the 19-to-28-neuron motor connectome of _Caenorhabditis elegans_, NCPs demonstrated remarkable parameter efficiency, interpretability, and robust autonomous steering. However, _C. elegans_ is a non-visual, non-flying organism with an extremely primitive behavioral repertoire. Scaling bio-constrained architectures to organisms capable of vision and aerial locomotion has previously remained an unsolved challenge.
 
 == 2.3 Whole-Brain Connectomics of _Drosophila melanogaster_
-Recent advances in electron microscopy connectomics have unveiled the complete connectome of the adult fruit fly. Takemura et al. (2023) mapped the Janelia Male CNS v1.0 connectome, detailing hundreds of millions of synapses across the central brain and ventral nerve cord. Dorkenwald et al. (2024) and Schlegel et al. (2024) published the FlyWire whole-brain connectome, providing comprehensive cell typing and neuropil annotations. While neuroscientists have analyzed these circuits descriptively, Fly-CfC represents the first engineering framework to translate the whole-brain _Drosophila_ connectome into a differentiable continuous-time control network for robotics.
+Recent advances in electron microscopy connectomics have unveiled the complete connectome of the adult fruit fly. Berg et al. (2026) and Takemura et al. (2023) mapped the complete Janelia Male CNS v1.0 and ventral nerve cord connectomes, detailing hundreds of millions of synapses across the central brain and motor pathways. Dorkenwald et al. (2024) and Schlegel et al. (2024) published the FlyWire whole-brain connectome, providing comprehensive cell typing and neuropil annotations. While neuroscientists have analyzed these circuits descriptively, Fly-CfC represents the first engineering framework to translate the whole-brain _Drosophila_ connectome into a differentiable continuous-time control network for robotics.
 
 #v(1em)
 
@@ -226,7 +226,7 @@ To evaluate obstacle avoidance and flight vigor, we tested Fly-CfC across 5 cons
   ]
 )
 
-Fly-CfC attained a *100% survival rate (5/5 PASS)* with zero collisions, maintaining an average velocity of $4.44$ m/s and an ample minimum safety clearance of $4.34$ m.
+Fly-CfC attained a *100% survival rate (5/5 PASS)* with zero collisions (Figure 2), maintaining an average velocity of $4.44$ m/s and an ample minimum safety clearance of $4.34$ m.
 
 == 4.3 3D PyBullet Quadcopter Slalom Physics
 We embedded Fly-CfC into a 3D PyBullet quadcopter environment (`gym-pybullet-drones`) operating under full aerodynamic drag, ground effect, motor thrust dynamics, and contact point collision physics (`p.getContactPoints()`).
@@ -256,7 +256,7 @@ Fly-CfC demonstrates that biological connectomes are not merely descriptive anat
 
 == 5.2 Limitations
 Several limitations provide fruitful directions for future research:
-1. *Sim-to-Real Aerodynamics:* While PyBullet accurately models multi-rotor rigid body dynamics, real-world outdoor flight introduces unmodeled wind gusts, downwash turbulence, and motor saturation.
+1. *Sim-to-Real Aerodynamics:* While PyBullet accurately models multi-rotor rigid body dynamics, real-world outdoor flight introduces unmodeled wind gusts, downwash turbulence, and motor saturation. Future work includes deploying the quantized C++ / ONNX implementation of Fly-CfC onto physical micro-quadcopters (e.g., Bitcraze Crazyflie) to benchmark real-world aerodynamic resilience.
 2. *Neuromodulators:* The current architecture models fast ionotropic synaptic transmission but omits slow neuromodulators (octopamine, dopamine, serotonin), which modulate arousal and behavioral state in living flies.
 3. *Ommatidia Resolution:* The current vision model employs 64 rays across $360^degree$; scaling to full micro-lens imaging (750 ommatidia per eye) with motion-energy optical flow will further improve spatial fidelity.
 
@@ -275,8 +275,19 @@ We presented *Fly-CfC*, the world's first whole-brain connectome-constrained Clo
 
 #v(1em)
 
+= Acknowledgments
+The author thanks the Janelia FlyEM project team and the FlyWire Consortium for reconstructing and annotating the whole-brain _Drosophila_ connectome datasets, as well as the developers of the `ncps` framework and `gym-pybullet-drones` for their open-source tools.
+
+#v(1em)
+
+= Data and Code Availability
+All code, models, and simulation environments developed in this work are openly available at https://github.com/uipo9243-svg/Fly-CfC under the Apache 2.0 license. The underlying connectome dataset (`male-cns:v1.0`) is accessible via Janelia neuPrint (https://neuprint.janelia.org/).
+
+#v(1em)
+
 = References
 + Hasani, R., Lechner, M., Amini, A., Liebenwein, L., Ray, A., Tschaikowski, M., Teschl, G., & Rus, D. (2022). Closed-form continuous-time neural networks. _Nature Machine Intelligence_, 4(11), 992–1003.
++ Berg, S., Beckett, I. R., Costa, M., Schlegel, P., Januszewski, M., et al. (2026). Sexual dimorphism in the complete Drosophila male central nervous system connectome. _Cell_, 189(18), 5504–5526. https://doi.org/10.1016/j.cell.2026.08.015
 + Lechner, M., Hasani, R., Amini, A., Henzinger, T. A., Rus, D., & Grosu, R. (2020). Neural circuit policies enabling auditable autonomous driving. _Nature Machine Intelligence_, 2(10), 642–652.
 + Hasani, R., Lechner, M., Amini, A., Rus, D., & Grosu, R. (2021). Liquid time-constant networks. _Proceedings of the AAAI Conference on Artificial Intelligence_, 35(9), 7657–7666.
 + Takemura, S., Shinomiya, K., Rivlin, P. K., Xu, C. S., Zhao, A., Huang, G. B., Zhao, T., Scheffer, L., & Plaza, S. M. (2023). A connectome of the male Drosophila ventral nerve cord and brain. _Nature_, 624, 383–392.
