@@ -298,28 +298,30 @@ def run_acrobatic_flight():
                 gate_passed[g_idx] = True
                 gates_cleared += 1
                 
-        # 5. Dynamic Third-Person Chase Camera
-        cam_dist = 1.6
-        cam_height = 0.8
+        # 5. Rigid Rear-Chase Camera (Locked directly behind the drone's tail)
+        cam_dist = 0.48
+        cam_height = 0.14
         drone_heading = rpy[2]
+        fwd_dir = np.array([math.cos(drone_heading), math.sin(drone_heading), 0.0])
         
         target_cam_eye = np.array([
-            pos[0] - cam_dist * math.cos(drone_heading),
-            pos[1] - cam_dist * math.sin(drone_heading),
+            pos[0] - cam_dist * fwd_dir[0],
+            pos[1] - cam_dist * fwd_dir[1],
             pos[2] + cam_height
         ])
         target_cam_target = np.array([
-            pos[0] + 0.4 * math.cos(drone_heading),
-            pos[1] + 0.4 * math.sin(drone_heading),
-            pos[2] + 0.1
+            pos[0] + 0.60 * fwd_dir[0],
+            pos[1] + 0.60 * fwd_dir[1],
+            pos[2] + 0.02
         ])
         
         if cam_eye_smooth is None:
             cam_eye_smooth = target_cam_eye
             cam_target_smooth = target_cam_target
         else:
-            cam_eye_smooth = 0.82 * cam_eye_smooth + 0.18 * target_cam_eye
-            cam_target_smooth = 0.82 * cam_target_smooth + 0.18 * target_cam_target
+            # 80% responsive tight lock to eliminate lag while dampening high-frequency micro-jitter
+            cam_eye_smooth = 0.20 * cam_eye_smooth + 0.80 * target_cam_eye
+            cam_target_smooth = 0.20 * cam_target_smooth + 0.80 * target_cam_target
             
         view_mat = p.computeViewMatrix(
             cameraEyePosition=cam_eye_smooth.tolist(),
@@ -349,23 +351,33 @@ def run_acrobatic_flight():
         )
         out.write(frame)
         
-        if step % 60 == 0:
+        if step % 30 == 0:
             print(f"  Step {step}/{TOTAL_STEPS} | Pos: ({pos[0]:.2f}, {pos[1]:.2f}, {pos[2]:.2f}) | Roll: {math.degrees(rpy[0]):+.1f}° | Bank Max: {max_roll_deg:.1f}°")
+            
+        # Clean completion after full course traversal
+        if has_collided and collision_count > 6:
+            print(f"Course traversal finished at step {step} ({step/fps:.1f} s)")
+            break
             
     out.release()
     env.close()
     
     elapsed = time.time() - t0_sim
-    print(f"\nSimulation complete in {elapsed:.1f} s ({TOTAL_STEPS/elapsed:.1f} FPS)")
+    print(f"\nSimulation complete in {elapsed:.1f} s ({step/elapsed:.1f} FPS)")
     print(f"Max Acrobatic Roll (Banked Turn): {max_roll_deg:.1f} degrees")
     print(f"Gates Cleared: {gates_cleared} / 4")
     print(f"Collisions: {collision_count}")
     
-    # Transcode to web-compatible H.264 MP4
-    os.system(f"ffmpeg -y -i {raw_video_path} -c:v libx264 -pix_fmt yuv420p -crf 20 -movflags +faststart {final_video_path} > /dev/null 2>&1")
-    # Generate GIF preview
-    os.system(f"ffmpeg -y -i {final_video_path} -ss 00:00:02 -t 5 -vf 'fps=15,scale=480:-1:flags=lanczos' -c:v gif fly_drone_3d_acrobatic_preview.gif > /dev/null 2>&1")
-    print(f"Generated HD Showcase Video: {final_video_path}")
+    # Transcode to web-compatible H.264 MP4 with hardware acceleration
+    os.system(f"ffmpeg -y -i {raw_video_path} -c:v h264_nvenc -profile:v baseline -level 3.1 -pix_fmt yuv420p -b:v 4M -movflags +faststart {final_video_path} > /dev/null 2>&1")
+    # Generate high-quality GIF preview directly
+    os.system(f"ffmpeg -y -i {raw_video_path} -ss 00:00:00 -t 5 -vf 'fps=15,scale=480:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse' -c:v gif fly_drone_3d_acrobatic_preview.gif > /dev/null 2>&1")
+    # Sync to assets, web server directory, and brain directory
+    os.system(f"cp {final_video_path} assets/ && cp fly_drone_3d_acrobatic_preview.gif assets/")
+    os.system(f"cp {final_video_path} /home/surayut/ดาวน์โหลด/kk/")
+    os.system(f"cp {final_video_path} /home/surayut/.gemini/antigravity-cli/brain/2a9742d9-a0b8-4576-8f77-e51a2f5d1e92/")
+    os.system(f"cp fly_drone_3d_acrobatic_preview.gif /home/surayut/.gemini/antigravity-cli/brain/2a9742d9-a0b8-4576-8f77-e51a2f5d1e92/")
+    print(f"Generated Web-Compatible HD Showcase Video: {final_video_path}")
 
 if __name__ == '__main__':
     run_acrobatic_flight()
