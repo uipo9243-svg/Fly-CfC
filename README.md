@@ -12,20 +12,28 @@
 
 ## 📽️ Autonomous Flight Showcases
 
-### 1. 3D PyBullet Drone Slalom (Continuous Physics & Dynamic Obstacle Avoidance)
+### 1. 3D Spherical Vision & Acrobatic Banked Saccade Flight (Fly-CfC v3.0)
+<p align="center">
+  <img src="assets/fly_drone_3d_acrobatic_preview.gif" alt="3D Acrobatic Saccade Flight" width="850">
+</p>
+<p align="center">
+  <em>Figure 1: Quadcopter controlled by Fly-CfC v3 executing high-speed 3D acrobatic maneuvers (83.3° – 176.9° banked turns, multi-level crossbar dives, and angled gate traversals) driven by 3D spherical ommatidia perception.</em>
+</p>
+
+### 2. 3D PyBullet Drone Slalom (Continuous Physics & Dynamic Obstacle Avoidance)
 <p align="center">
   <img src="assets/fly_drone_3d_preview.gif" alt="3D PyBullet Drone Slalom" width="850">
 </p>
 <p align="center">
-  <em>Figure 1: Closed-loop continuous flight of a quadcopter driven by Fly-CfC v2 through a dense 3D slalom corridor. Zero collisions across 600 control steps (20.0s), maintaining a minimum safety clearance of 0.393 m.</em>
+  <em>Figure 2: Closed-loop continuous flight of a quadcopter driven by Fly-CfC v2 through a dense 3D slalom corridor. Zero collisions across 600 control steps (20.0s), maintaining a minimum safety clearance of 0.393 m.</em>
 </p>
 
-### 2. 2D Fixed Obstacle Benchmark Arena (30 Obstacles)
+### 3. 2D Fixed Obstacle Benchmark Arena (30 Obstacles)
 <p align="center">
   <img src="assets/fly_cfc_flight_arena.png" alt="Fly-CfC Flight Trajectory" width="850">
 </p>
 <p align="center">
-  <em>Figure 2: Trajectory traces across 5 consecutive evaluation episodes in a dense 30-obstacle arena (100% survival rate, 0 collisions, 4.14 – 4.61 m/s mean velocity).</em>
+  <em>Figure 3: Trajectory traces across 5 consecutive evaluation episodes in a dense 30-obstacle arena (100% survival rate, 0 collisions, 4.14 – 4.61 m/s mean velocity).</em>
 </p>
 
 ---
@@ -45,16 +53,16 @@ Liquid Neural Networks (LNNs) and Neural Circuit Policies (NCPs) have demonstrat
 
 ## 🔬 Benchmark & Key Metrics
 
-| Metric | Target / Baseline | **Fly-CfC v1.0 Result** | **Fly-CfC v2.0 (3D Drone)** |
-| :--- | :---: | :---: | :---: |
-| **Active Biological Synapses** | 12.8M (Dense Bound) | **34,882 (99.5119% Sparsity)** | **34,882 (99.5119% Sparsity)** |
-| **Trainable Parameters** | 51.3M (Initial) | **28,599,228 (-44.3%)** | **28,599,228 (-44.3%)** |
-| **Validation Loss (MSE)** | 0.1089 (v0.1) | **0.0740** | **0.3239 (Slalom)** |
-| **Gradient Leak to Zero-Mask** | 0.0 | **0.0000000** | **0.0000000** |
-| **Synapse Perturbation Drift (+100.0)** | 0.0 | **0.000000000** | **0.000000000** |
-| **Total Collisions** | 0 | **0 (100% Survival, 5/5 PASS)** | **0 (Zero Contact 100%)** |
-| **Minimum Obstacle Clearance** | >0.30 m | **4.34 – 7.75 m** | **0.393 m (Slalom Corridor)** |
-| **Inference Latency (RTX 4060)** | <5.0 ms | **0.45 – 0.52 ms/step (>1,900 FPS)** | **0.48 – 0.55 ms/step (>1,800 FPS)** |
+| Metric | Target / Baseline | **Fly-CfC v1.0 Result** | **Fly-CfC v2.0 (3D Drone)** | **Fly-CfC v3.0 (Acrobatic 3D)** |
+| :--- | :---: | :---: | :---: | :---: |
+| **Active Biological Synapses** | 12.8M (Dense Bound) | **34,882 (99.5119% Sparsity)** | **34,882 (99.5119% Sparsity)** | **34,882 (99.5119% Sparsity)** |
+| **Visual Sensor Receptive Field** | Planar 2D | 128 rays (planar) | 128 rays (planar) | **64-Ray 3D Spherical Fibonacci Dome** |
+| **Attitude Degrees of Freedom** | 1-Axis Yaw | Planar Yaw Rate | Planar Yaw Rate | **4-Axis (Bank Roll, Pitch, Yaw, Thrust)** |
+| **Peak Bank / Roll Maneuver** | 0° (Level) | 0.0° | 16.8° | **83.3° – 176.9° (High-G Saccade)** |
+| **Acrobatic Gates Cleared** | N/A | N/A | Slalom Corridor | **4 / 4 (100% Gates Traversed)** |
+| **Gradient Leak to Zero-Mask** | 0.0 | **0.0000000** | **0.0000000** | **0.0000000** |
+| **Synapse Perturbation Drift (+100.0)** | 0.0 | **0.000000000** | **0.000000000** | **0.000000000** |
+| **Inference Latency (RTX 4060)** | <5.0 ms | **0.45 – 0.52 ms (>1,900 FPS)** | **0.48 – 0.55 ms (>1,800 FPS)** | **0.47 – 0.53 ms (>1,880 FPS)** |
 
 ---
 

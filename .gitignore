@@ -229,4 +229,9 @@ male_cns_connectome/*.full4581.*
 models/fly_cfc_v1_final.pth
 models/fly_cfc_v2_3d.pth
 models/fly_cfc_champion.pth
+models/fly_cfc_v3_acrobatic.pth
 *.pre_fix_backup.*
+*.raw.mp4
+/fly_drone_3d_acrobatic_raw.mp4
+/fly_drone_3d_acrobatic_showcase.mp4
+/fly_drone_3d_acrobatic_preview.gif
