@@ -197,6 +197,7 @@ Table \ref{tab:latency_benchmark} compares Fly-CfC against standard deep learnin
 \centering
 \caption{\textbf{Computational Efficiency and Inference Latency Benchmark.}}
 \label{tab:latency_benchmark}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
 \textbf{Model Architecture} & \textbf{Internal Neurons} & \textbf{Sparsity} & \textbf{Trainable Params} & \textbf{Latency (ms)} & \textbf{Frame Rate (FPS)} & \textbf{Survival Rate} \\
@@ -207,7 +208,8 @@ NCP (\emph{C. elegans}) & 19 & 82.4\% & 1,844 & 0.12 ms & 8,333 FPS & 0.0\% (No 
 \textbf{Fly-CfC v1.0 (Ours)} & \textbf{1,961} & \textbf{99.5119\%} & \textbf{28,599,228} & \textbf{0.45 ms} & \textbf{2,222 FPS} & \textbf{100.0\% (5/5 PASS)} \\
 \textbf{Fly-CfC v2.0 3D (Ours)} & \textbf{1,961} & \textbf{99.5119\%} & \textbf{28,599,228} & \textbf{0.48 ms} & \textbf{2,083 FPS} & \textbf{100.0\% (Zero Contact)} \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table*}
 
 Fly-CfC achieves a sub-millisecond inference latency of \textbf{0.45 ms/step} (>2,000 FPS), which is 2.6x faster than a dense CfC network of identical neuron count while reducing total memory graph footprint by over 99.5\%.
@@ -219,6 +221,7 @@ To evaluate obstacle avoidance and flight vigor, we tested Fly-CfC across 5 cons
 \centering
 \caption{\textbf{2D Fixed-Obstacle Arena Telemetry Report (30 Obstacles).}}
 \label{tab:arena_telemetry}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lcccccc}
 \toprule
 \textbf{Episode} & \textbf{Outcome} & \textbf{Steps} & \textbf{Distance (m)} & \textbf{Velocity (m/s)} & \textbf{Min Clearance (m)} & \textbf{Latency (ms)} \\
@@ -231,7 +234,8 @@ Episode 5 & PASS & 150 / 150 & 20.6 m & 4.58 m/s & 6.60 m & 0.48 ms \\
 \midrule
 \textbf{Overall} & \textbf{100\% PASS} & \textbf{750 / 750} & \textbf{20.0 m} & \textbf{4.44 m/s} & \textbf{6.54 m} & \textbf{0.46 ms} \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
 
 \begin{figure}[t]

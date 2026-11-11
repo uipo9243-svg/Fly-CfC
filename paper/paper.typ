@@ -183,7 +183,7 @@ Table 1 compares Fly-CfC against standard deep learning and continuous-time base
 
 #align(center)[
   #table(
-    columns: (2.2cm, 1.8cm, 1.6cm, 2.2cm, 1.8cm, 1.8cm, 2.2cm),
+    columns: (2.8cm, 1.6cm, 1.8cm, 2.4cm, 1.8cm, 1.8cm, 2.6cm),
     stroke: (x, y) => if y == 0 { (bottom: 1.5pt + black) } else if y == 5 { (top: 1pt + black, bottom: 1.5pt + black) } else { (top: 0.5pt + luma(200)) },
     inset: 5pt,
     align: (left, center, center, center, center, center, center),
@@ -204,7 +204,7 @@ To evaluate obstacle avoidance and flight vigor, we tested Fly-CfC across 5 cons
 
 #align(center)[
   #table(
-    columns: (2cm, 1.8cm, 2cm, 2.2cm, 2.2cm, 2.4cm, 1.8cm),
+    columns: (2.2cm, 2.0cm, 2.2cm, 2.2cm, 2.2cm, 2.4cm, 2.0cm),
     stroke: (x, y) => if y == 0 { (bottom: 1.5pt + black) } else if y == 5 { (top: 1pt + black, bottom: 1.5pt + black) } else { (top: 0.5pt + luma(200)) },
     inset: 5pt,
     align: (left, center, center, center, center, center, center),
